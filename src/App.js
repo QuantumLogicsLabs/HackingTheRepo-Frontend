@@ -450,16 +450,16 @@ export default function App() {
             <StatCard icon={Cpu}        label="Agent Status"  value={isRunning ? 'Running' : 'Idle'} color={isRunning ? '#d29922' : '#3fb950'} />
           </div>
 
-          <div className="two-col">
+          <div className="two-col dashboard-grid">
             {/* Left: Repos + Chat */}
-            <div>
-              <div className="panel">
+            <div className="dashboard-left-col">
+              <div className="panel repository-panel">
                 <div className="panel-header">
                   <GitBranch size={15} />
                   <span>Target Repository</span>
                 </div>
                 {REPOS.length > 0 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                  <div className="repo-list-wrap">
                     {REPOS.map(r => (
                       <div key={r} onClick={() => setSelectedRepo(r)} style={{ cursor: 'pointer' }}>
                         <RepoCard repo={r} isActive={selectedRepo === r && isRunning} />
@@ -476,7 +476,7 @@ export default function App() {
                 />
               </div>
 
-              <div className="panel">
+              <div className="panel instruction-panel">
                 <div className="panel-header">
                   <Sparkles size={15} />
                   <span>Instruct the Agent</span>
@@ -501,16 +501,17 @@ export default function App() {
             </div>
 
             {/* Right: Job History + Live Feed */}
-            <div>
-              <div className="panel">
+            <div className="dashboard-right-col">
+              <div className="panel jobs-panel">
                 <div className="panel-header">
                   <Activity size={15} />
                   <span>Recent Jobs</span>
                   <button className="clear-btn" onClick={fetchJobs}><RefreshCw size={11} /></button>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <div className="jobs-list">
                   {jobs.slice(0, 6).map(job => (
                     <div
+                      className="job-item"
                       key={job._id}
                       onClick={() => { setActiveJobId(job._id); setView('job'); }}
                       style={{
@@ -541,7 +542,7 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="panel">
+              <div className="panel activity-panel">
                 <div className="panel-header">
                   <Zap size={15} />
                   <span>Global Activity Feed</span>
