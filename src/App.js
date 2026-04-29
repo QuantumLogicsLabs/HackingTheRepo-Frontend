@@ -34,7 +34,7 @@ function RiskBadge({ level }) {
   return <span className={`badge ${cls}`} style={{ fontSize: '0.7rem' }}>{label}</span>;
 }
 
-function RepoCard({ repo, isActive }) {
+function RepoCard({ repo, isActive, isRunning }) {
   const parts = repo.split('/');
   const name  = parts[1] || repo;
   const owner = parts[0] || '';
@@ -46,15 +46,39 @@ function RepoCard({ repo, isActive }) {
           <div className="repo-name">{name}</div>
           <div className="repo-owner">{owner}</div>
         </div>
-        {isActive && <div className="pulse-dot" title="AI Active" />}
+        {isActive && isRunning && <div className="pulse-dot" title="AI Active" />}
       </div>
       <div className="repo-meta">
         <Code size={11} />
         <span>{owner}/{name}</span>
-        {isActive && <span className="active-label">⚡ AI Active</span>}
+        {isActive && isRunning && <span className="active-label">⚡ AI Active</span>}
       </div>
     </div>
   );
+}
+
+function parseRepoTarget(repoTarget) {
+  const value = (repoTarget || '').trim();
+  if (!value) return null;
+
+  try {
+    if (value.startsWith('http://') || value.startsWith('https://')) {
+      const parsed = new URL(value);
+      const segments = parsed.pathname.replace(/^\/+|\/+$/g, '').split('/').filter(Boolean);
+      const owner = segments[0];
+      const name = segments[1]?.replace(/\.git$/i, '');
+      if (!owner || !name) return null;
+      return { owner, name };
+    }
+  } catch {
+    return null;
+  }
+
+  const parts = value.replace(/^\/+|\/+$/g, '').split('/').filter(Boolean);
+  if (parts.length >= 2) {
+    return { owner: parts[0], name: parts[1].replace(/\.git$/i, '') };
+  }
+  return null;
 }
 
 function StatCard({ icon: Icon, label, value, color }) {
@@ -326,6 +350,9 @@ export default function App() {
   const [globalLogs, setGlobalLogs] = useState([]);
   const [view, setView]             = useState('dashboard'); // 'dashboard' | 'job'
   const socketRef                   = useRef(null);
+  const repoTarget = customRepo.trim() || selectedRepo;
+  const parsedRepo = parseRepoTarget(repoTarget);
+  const prRepoPath = parsedRepo ? `${parsedRepo.owner}/${parsedRepo.name}` : '';
 
   // Socket connection
   useEffect(() => {
@@ -368,12 +395,10 @@ export default function App() {
   }, [fetchJobs]);
 
   const launchAgent = useCallback(async (instructions) => {
-    const repoTarget = customRepo.trim() || selectedRepo;
-    if (!repoTarget) return;
-
-    const [repoOwner, repoName] = repoTarget.includes('github.com')
-      ? (() => { const p = new URL(repoTarget).pathname.replace(/^\//, '').split('/'); return [p[0], p[1]]; })()
-      : repoTarget.split('/');
+    const target = customRepo.trim() || selectedRepo;
+    const parsed = parseRepoTarget(target);
+    if (!parsed) return;
+    const { owner: repoOwner, name: repoName } = parsed;
 
     try {
       setIsRunning(true);
@@ -432,9 +457,9 @@ export default function App() {
             {v === 'dashboard' ? <><FolderSync size={13} /> Dashboard</> : <><Terminal size={13} /> Active Job</>}
           </button>
         ))}
-        {activeJobId && (
+        {activeJobId && prRepoPath && (
           <a
-            href={`https://github.com/${selectedRepo}/pulls`}
+            href={`https://github.com/${prRepoPath}/pulls`}
             target="_blank"
             rel="noreferrer"
             className="clear-btn"
@@ -460,19 +485,19 @@ export default function App() {
             <StatCard icon={Cpu}        label="Agent Status"  value={isRunning ? 'Running' : 'Idle'} color={isRunning ? '#d29922' : '#3fb950'} />
           </div>
 
-          <div className="two-col">
+          <div className="two-col dashboard-grid">
             {/* Left: Repos + Chat */}
-            <div>
-              <div className="panel">
+            <div className="dashboard-left-col">
+              <div className="panel repository-panel">
                 <div className="panel-header">
                   <GitBranch size={15} />
                   <span>Target Repository</span>
                 </div>
                 {REPOS.length > 0 && (
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                  <div className="repo-list-wrap">
                     {REPOS.map(r => (
                       <div key={r} onClick={() => setSelectedRepo(r)} style={{ cursor: 'pointer' }}>
-                        <RepoCard repo={r} isActive={selectedRepo === r && isRunning} />
+                        <RepoCard repo={r} isActive={selectedRepo === r} isRunning={isRunning} />
                       </div>
                     ))}
                   </div>
@@ -486,7 +511,7 @@ export default function App() {
                 />
               </div>
 
-              <div className="panel">
+              <div className="panel instruction-panel">
                 <div className="panel-header">
                   <Sparkles size={15} />
                   <span>Instruct the Agent</span>
@@ -511,16 +536,17 @@ export default function App() {
             </div>
 
             {/* Right: Job History + Live Feed */}
-            <div>
-              <div className="panel">
+            <div className="dashboard-right-col">
+              <div className="panel jobs-panel">
                 <div className="panel-header">
                   <Activity size={15} />
                   <span>Recent Jobs</span>
                   <button className="clear-btn" onClick={fetchJobs}><RefreshCw size={11} /></button>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <div className="jobs-list">
                   {jobs.slice(0, 6).map(job => (
                     <div
+                      className="job-item"
                       key={job._id}
                       onClick={() => { setActiveJobId(job._id); setView('job'); }}
                       style={{
@@ -551,7 +577,7 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="panel">
+              <div className="panel activity-panel">
                 <div className="panel-header">
                   <Zap size={15} />
                   <span>Global Activity Feed</span>
