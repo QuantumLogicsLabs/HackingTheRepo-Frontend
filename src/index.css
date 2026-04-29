@@ -44,6 +44,16 @@ body {
   gap: 1.5rem;
 }
 
+/* Keep compatibility with current App root class */
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
 /* ──── Header ──── */
 .header {
   display: flex;
@@ -346,6 +356,37 @@ body {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
 }
 
+/* Current component class names */
+.panel {
+  background: var(--panel-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+}
+
+.panel + .panel {
+  margin-top: 1rem;
+}
+
+.panel-header {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e6edf3;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--panel-border);
+}
+
+.panel-header > .clear-btn {
+  margin-left: auto;
+}
+
 .panel-title {
   font-size: 1rem;
   font-weight: 600;
@@ -485,6 +526,24 @@ textarea {
   transition: all 0.2s;
 }
 
+.repo-input {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--panel-border);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  font-size: 0.88rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.repo-input:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(74, 157, 248, 0.12);
+}
+
 textarea:focus {
   outline: none;
   border-color: var(--accent-color);
@@ -580,6 +639,45 @@ button.btn-running {
   background: rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   padding: 0.75rem;
+}
+
+.terminal-output {
+  max-height: 450px;
+  overflow-y: auto;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.75rem;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(48, 58, 74, 0.45);
+}
+
+.log-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.35rem 0.45rem;
+  border-radius: 6px;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.log-success {
+  background: rgba(45, 164, 78, 0.06);
+  border-left: 2px solid rgba(45, 164, 78, 0.5);
+}
+
+.log-error {
+  background: rgba(248, 81, 73, 0.07);
+  border-left: 2px solid rgba(248, 81, 73, 0.55);
+}
+
+.log-warning {
+  background: rgba(212, 167, 44, 0.08);
+  border-left: 2px solid rgba(212, 167, 44, 0.5);
 }
 
 .terminal-body::-webkit-scrollbar {
@@ -785,15 +883,58 @@ button.btn-running {
     flex-direction: column;
     text-align: center;
   }
+
+  .header-logo {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .chat-container {
+    height: 340px;
+  }
 }
 
 @media (max-width: 500px) {
+  .app {
+    padding: 1rem 0.75rem 2rem;
+    gap: 1rem;
+  }
+
   .stats-row {
     grid-template-columns: 1fr;
   }
 
   .header-logo h1 {
     font-size: 1.4rem;
+  }
+
+  .panel {
+    padding: 0.8rem;
+    border-radius: 12px;
+  }
+
+  .chat-container {
+    height: 300px;
+  }
+
+  .chat-bubble {
+    max-width: 92%;
+    font-size: 0.84rem;
+  }
+
+  .chat-input-area {
+    padding: 0.55rem;
+    gap: 0.4rem;
+  }
+
+  .fetch-btn {
+    font-size: 0.76rem;
+    padding: 0.38rem 0.65rem;
+  }
+
+  .repo-meta {
+    gap: 0.5rem;
+    flex-wrap: wrap;
   }
 }
 
