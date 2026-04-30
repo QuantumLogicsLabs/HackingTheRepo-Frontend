@@ -62,9 +62,6 @@
   top: 24px;
 }
 
-/* Examples */
-.quick-examples {
-}
 .examples-title {
   font-family: var(--font-display);
   font-size: 12px;
@@ -115,9 +112,6 @@
   line-height: 1.45;
 }
 
-/* Bot info */
-.bot-info {
-}
 .bot-info-title {
   font-family: var(--font-display);
   font-size: 12px;

@@ -123,9 +123,6 @@
   color: var(--text3);
 }
 
-/* Bot status */
-.bot-status-card {
-}
 .bot-status-row {
   display: flex;
   align-items: center;
