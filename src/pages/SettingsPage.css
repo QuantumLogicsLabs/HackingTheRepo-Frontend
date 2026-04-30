@@ -1,0 +1,102 @@
+.settings-layout {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 20px;
+  align-items: start;
+}
+
+.settings-form { display: flex; flex-direction: column; gap: 16px; }
+
+.settings-section { display: flex; flex-direction: column; gap: 16px; }
+
+.settings-section-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.settings-note {
+  font-size: 12px;
+  color: var(--text3);
+  background: var(--bg3);
+  border-radius: 6px;
+  padding: 10px 12px;
+  line-height: 1.5;
+}
+
+.settings-note code {
+  color: var(--yellow);
+  background: var(--bg4);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+.token-field {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.token-field input { flex: 1; }
+
+.show-btn {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--text3);
+  padding: 10px 12px;
+  font-size: 11px;
+  white-space: nowrap;
+  border-radius: var(--radius);
+  flex-shrink: 0;
+}
+
+.show-btn:hover { color: var(--text); }
+
+.token-saved {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-glow);
+  padding: 1px 7px;
+  border-radius: 100px;
+  margin-left: 8px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.settings-side { display: flex; flex-direction: column; gap: 14px; }
+
+.stats-mini { display: flex; flex-direction: column; gap: 12px; }
+
+.mini-stat { display: flex; align-items: baseline; gap: 10px; }
+
+.mini-stat-val {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.mini-stat-label { font-size: 12px; color: var(--text3); }
+
+.bot-status-row { display: flex; align-items: center; gap: 8px; }
+
+.bot-status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 2s ease infinite;
+}
+
+.bot-status-text { font-size: 13px; color: var(--text2); font-weight: 500; }
+
+@media (max-width: 700px) {
+  .settings-layout { grid-template-columns: 1fr; }
+}

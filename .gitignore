@@ -1,4 +1,10 @@
 node_modules/
-dist/
-build/
 .env
+dist/
+.DS_Store
+*.log
+
+
+.txtconfig
+.txtignore
+HackingTheRepo.txt

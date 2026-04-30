@@ -1,0 +1,179 @@
+.job-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--text2);
+  text-decoration: none;
+}
+
+.back-link:hover { color: var(--text); text-decoration: none; }
+
+.job-detail-top {
+  margin-bottom: 24px;
+}
+
+.job-detail-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.repo-pill {
+  font-size: 12px;
+  color: var(--blue);
+  background: rgba(88, 166, 255, 0.08);
+  border: 1px solid rgba(88, 166, 255, 0.15);
+  padding: 4px 10px;
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.job-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+  align-items: start;
+}
+
+.job-detail-main, .job-detail-side {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.detail-section { display: flex; flex-direction: column; gap: 14px; }
+
+.detail-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.detail-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+.detail-key {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  width: 90px;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+
+.detail-val { font-size: 13px; color: var(--text2); flex: 1; }
+
+.detail-code {
+  font-size: 12px;
+  color: var(--purple);
+  background: rgba(163, 113, 247, 0.08);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* PR success */
+.pr-success {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-color: rgba(0, 255, 136, 0.2);
+  background: rgba(0, 255, 136, 0.04);
+  animation: glow 2s ease infinite;
+}
+
+.pr-success-icon { font-size: 28px; flex-shrink: 0; }
+.pr-success-title { font-family: var(--font-display); font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+.pr-url-link { font-size: 12px; color: var(--blue); word-break: break-all; }
+
+/* Diff */
+.diff-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.diff-text { font-size: 13px; color: var(--text2); }
+
+/* Error */
+.error-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  border-color: rgba(248, 81, 73, 0.2);
+  background: rgba(248, 81, 73, 0.04);
+}
+
+.error-icon { font-size: 20px; flex-shrink: 0; }
+.error-title { font-weight: 600; color: var(--red); margin-bottom: 4px; font-size: 13px; }
+.error-text { font-size: 12px; color: var(--text2); }
+
+/* Running */
+.running-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-color: rgba(88, 166, 255, 0.2);
+  background: rgba(88, 166, 255, 0.04);
+}
+
+.running-anim { display: flex; gap: 4px; flex-shrink: 0; }
+
+.running-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--blue);
+  animation: pulse 1.2s ease infinite;
+}
+
+.running-dot:nth-child(2) { animation-delay: 0.2s; }
+.running-dot:nth-child(3) { animation-delay: 0.4s; }
+
+.running-title { font-weight: 600; color: var(--blue); margin-bottom: 3px; font-size: 13px; }
+.running-sub { font-size: 12px; color: var(--text3); }
+
+/* Refine */
+.refine-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.refine-sub { font-size: 12px; color: var(--text2); margin-bottom: 12px; }
+
+/* Refinement history */
+.refinement-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+
+.refinement-item { display: flex; gap: 10px; align-items: flex-start; }
+
+.ref-num {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--purple);
+  background: rgba(163, 113, 247, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.ref-instruction { font-size: 12px; color: var(--text2); margin-bottom: 3px; }
+.ref-time { font-size: 10px; color: var(--text3); }
+
+@media (max-width: 800px) {
+  .job-detail-grid { grid-template-columns: 1fr; }
+}
