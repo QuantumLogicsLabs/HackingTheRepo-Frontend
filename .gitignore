@@ -1,4 +1,5 @@
 node_modules/
+<<<<<<< HEAD
 .env
 dist/
 .DS_Store
@@ -8,3 +9,8 @@ dist/
 .txtconfig
 .txtignore
 HackingTheRepo.txt
+=======
+dist/
+build/
+.env
+>>>>>>> b1261c788b2270d757cc469ad1d83bbb98158b52
