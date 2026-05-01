@@ -1,0 +1,241 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 228px;
+  flex-shrink: 0;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 10;
+  /* Subtle inner glow on the right edge */
+  box-shadow:
+    inset -1px 0 0 var(--border),
+    4px 0 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Logo area */
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 20px 18px 18px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.sidebar-logo::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 18px;
+  right: 18px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent3), transparent);
+  opacity: 0.4;
+}
+
+.logo-icon {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 245, 160, 0.15),
+    rgba(0, 245, 160, 0.05)
+  );
+  border: 1px solid rgba(0, 245, 160, 0.25);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 12px rgba(0, 245, 160, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.03em;
+}
+
+.logo-text span {
+  color: var(--accent);
+}
+
+/* Nav */
+.sidebar-nav {
+  flex: 1;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-section-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text3);
+  padding: 12px 10px 5px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--radius-md);
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s;
+  position: relative;
+  border: 1px solid transparent;
+}
+
+.nav-item:hover {
+  background: var(--bg3);
+  color: var(--text);
+  text-decoration: none;
+  border-color: var(--border);
+}
+
+.nav-item.active {
+  background: rgba(0, 245, 160, 0.07);
+  color: var(--accent);
+  border-color: rgba(0, 245, 160, 0.15);
+  font-weight: 600;
+}
+
+/* Active left accent bar */
+.nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 60%;
+  width: 2px;
+  background: var(--accent);
+  border-radius: 0 2px 2px 0;
+  box-shadow: 0 0 8px rgba(0, 245, 160, 0.6);
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.nav-item:hover .nav-icon,
+.nav-item.active .nav-icon {
+  opacity: 1;
+}
+
+/* Footer */
+.sidebar-footer {
+  padding: 12px 10px 14px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.sidebar-footer::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 10px;
+  right: 10px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent3), transparent);
+  opacity: 0.25;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--purple), var(--blue2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.user-meta {
+  overflow: hidden;
+}
+
+.user-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-email {
+  font-size: 10px;
+  color: var(--text3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.logout-btn {
+  background: transparent;
+  color: var(--text3);
+  border: 1px solid transparent;
+  padding: 7px;
+  flex-shrink: 0;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-btn:hover {
+  color: var(--red);
+  background: rgba(245, 80, 80, 0.08);
+  border-color: rgba(245, 80, 80, 0.15);
+}
+
+/* Main */
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
