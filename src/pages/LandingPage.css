@@ -297,25 +297,57 @@
   overflow: hidden;
 }
 
-.feature-card::before {
-  content: "";
+.feature-line {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.06),
-    transparent
-  );
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
 }
 
-.feature-card:hover {
-  border-color: var(--border2);
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
+.feature-line::before,
+.feature-line::after {
+  content: "";
+  position: absolute;
+  background: var(--yellow);
+  box-shadow: 0 0 10px var(--yellow);
+  transition: all 0.4s ease-in-out;
+  opacity: 0;
+}
+
+/* Top line */
+.feature-line::before {
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+}
+
+/* Bottom line */
+.feature-line::after {
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 2px;
+}
+
+.feature-card:hover .feature-line::before {
+  width: 100%;
+  opacity: 1;
+}
+
+.feature-card:hover .feature-line::after {
+  width: 100%;
+  opacity: 1;
+}
+
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 0.8em;
+  background: var(--accent);
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+  vertical-align: middle;
 }
 
 .feature-icon {
