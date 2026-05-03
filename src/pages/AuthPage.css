@@ -9,6 +9,18 @@
   overflow: hidden;
 }
 
+.auth-topbar {
+  width: 100%;
+  max-width: 1060px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+  position: relative;
+  z-index: 1;
+}
+
 /* Radial glow background */
 .auth-page::before {
   content: "";
@@ -58,6 +70,10 @@
   transition: color 0.15s;
   position: relative;
   z-index: 1;
+}
+
+.auth-topbar .theme-toggle {
+  margin-left: auto;
 }
 
 .auth-logo:hover {
@@ -143,4 +159,30 @@
 }
 .auth-switch a:hover {
   color: var(--text);
+}
+
+@media (max-width: 640px) {
+  .auth-page {
+    justify-content: flex-start;
+    padding-top: 18px;
+  }
+
+  .auth-topbar {
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 18px;
+  }
+
+  .auth-topbar .theme-toggle {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .auth-card {
+    padding: 24px;
+  }
+
+  .auth-title {
+    font-size: 20px;
+  }
 }

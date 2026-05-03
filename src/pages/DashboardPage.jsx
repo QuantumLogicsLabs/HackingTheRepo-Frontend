@@ -27,6 +27,8 @@ export default function DashboardPage() {
     try {
       const { data } = await api.get("/jobs");
       setJobs(data);
+    } catch {
+      setJobs([]);
     } finally {
       setLoading(false);
     }

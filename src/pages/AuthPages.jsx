@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import ThemeToggle from "../components/ThemeToggle";
 import "./AuthPage.css";
 
 export function LoginPage() {
@@ -18,7 +19,7 @@ export function LoginPage() {
       await login(form.email, form.password);
       navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      setError(err.response?.data?.message || err.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -26,6 +27,9 @@ export function LoginPage() {
 
   return (
     <AuthLayout title="Welcome back" sub="Sign in to your RepoMind account">
+      <div className="auth-hint">
+        Demo account: <strong>demo@repomind.dev</strong> / <strong>demo1234</strong>
+      </div>
       <form onSubmit={handle}>
         <div className="field">
           <label>Email</label>
@@ -65,7 +69,7 @@ export function SignupPage() {
       await signup(form.username, form.email, form.password);
       navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.message || "Signup failed");
+      setError(err.response?.data?.message || err.message || "Signup failed");
     } finally {
       setLoading(false);
     }
@@ -104,12 +108,15 @@ export function SignupPage() {
 function AuthLayout({ title, sub, children }) {
   return (
     <div className="auth-page">
-      <Link to="/" className="auth-logo">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-        RepoMind
-      </Link>
+      <div className="auth-topbar">
+        <Link to="/" className="auth-logo">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="var(--accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          RepoMind
+        </Link>
+        <ThemeToggle className="theme-toggle--auth" />
+      </div>
       <div className="auth-card card fade-in">
         <h1 className="auth-title">{title}</h1>
         <p className="auth-sub">{sub}</p>

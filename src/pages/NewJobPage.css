@@ -186,4 +186,24 @@
   .two-col {
     grid-template-columns: 1fr;
   }
+  .form-actions {
+    flex-direction: column;
+  }
+  .form-actions button {
+    width: 100%;
+    justify-content: center;
+  }
+  .job-sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 560px) {
+  .examples-list {
+    gap: 10px;
+  }
+
+  .example-btn {
+    padding: 12px 14px;
+  }
 }

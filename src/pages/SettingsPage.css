@@ -149,4 +149,19 @@
   .settings-layout {
     grid-template-columns: 1fr;
   }
+  .token-field {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .show-btn {
+    width: 100%;
+  }
+  .mini-stat {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .settings-form .btn-primary {
+    width: 100%;
+  }
 }

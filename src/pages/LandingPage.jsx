@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import ThemeToggle from "../components/ThemeToggle";
 import "./LandingPage.css";
 
 export default function LandingPage() {
@@ -12,6 +13,7 @@ export default function LandingPage() {
           RepoMind
         </div>
         <div className="landing-nav">
+          <ThemeToggle className="theme-toggle--landing" />
           <Link to="/login" className="btn-ghost" style={{ display: "inline-block", padding: "8px 18px" }}>Sign in</Link>
           <Link to="/signup" className="btn-primary" style={{ display: "inline-block", padding: "8px 18px" }}>Get started</Link>
         </div>
@@ -33,6 +35,21 @@ export default function LandingPage() {
         <div className="hero-cta">
           <Link to="/signup" className="btn-primary hero-btn">Start for free →</Link>
           <Link to="/login" className="btn-ghost hero-btn">Sign in</Link>
+        </div>
+
+        <div className="hero-metrics">
+          <div className="metric-card">
+            <strong>24/7</strong>
+            <span>Bot-ready automation</span>
+          </div>
+          <div className="metric-card">
+            <strong>3 steps</strong>
+            <span>From brief to PR</span>
+          </div>
+          <div className="metric-card">
+            <strong>Live</strong>
+            <span>Status and refinement</span>
+          </div>
         </div>
 
         <div className="terminal-demo">

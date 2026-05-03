@@ -32,7 +32,7 @@
 /* Stats grid */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 14px;
   margin-bottom: 36px;
 }
@@ -265,10 +265,32 @@
 }
 
 @media (max-width: 720px) {
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
   .page {
     padding: 24px 18px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .page-header .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .job-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .job-right {
+    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .repo-name {
+    max-width: 100%;
   }
 }

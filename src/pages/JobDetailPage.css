@@ -284,4 +284,27 @@
   .job-detail-grid {
     grid-template-columns: 1fr;
   }
+  .job-detail-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .job-detail-title {
+    align-items: flex-start;
+  }
+  .detail-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .detail-key {
+    width: auto;
+  }
+  .pr-success,
+  .error-card,
+  .running-card {
+    flex-direction: column;
+  }
+  .refinement-item {
+    flex-direction: column;
+  }
 }
