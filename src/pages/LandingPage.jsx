@@ -1,8 +1,43 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 import "./LandingPage.css";
 
+const TypingText = ({ text, delay = 25, started = true, onComplete, className = "", showCursor = true }) => {
+  const [displayedText, setDisplayedText] = useState("");
+  const [isFinished, setIsFinished] = useState(false);
+
+  useEffect(() => {
+    if (!started || isFinished) return;
+    
+    let index = 0;
+    const timer = setInterval(() => {
+      if (index < text.length) {
+        setDisplayedText(text.slice(0, index + 1));
+        index++;
+      } else {
+        clearInterval(timer);
+        setIsFinished(true);
+        if (onComplete) onComplete();
+      }
+    }, delay);
+    
+    return () => clearInterval(timer);
+  }, [text, delay, started, isFinished, onComplete]);
+
+  if (!started && displayedText === "") return null;
+
+  return (
+    <span className={className}>
+      {displayedText}
+      {!isFinished && showCursor && <span className="typing-cursor">|</span>}
+    </span>
+  );
+};
+
 export default function LandingPage() {
+  const [phase, setPhase] = useState(0);
+
   return (
     <div className="landing">
       <header className="landing-header">
@@ -22,15 +57,25 @@ export default function LandingPage() {
       <section className="hero">
         <div className="hero-badge">
           <span className="badge-dot" style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--accent)", display: "inline-block", marginRight: 6 }}></span>
-          Powered by LangChain + GPT-4o
+          <TypingText text="Powered by LangChain + GPT-4o" started={phase === 0} onComplete={() => setPhase(1)} />
         </div>
         <h1 className="hero-title">
-          Your AI bot <span className="accent-text">opens PRs</span><br />
-          while you sleep.
+          <TypingText text="Your AI bot " started={phase >= 1} onComplete={() => setPhase(2)} showCursor={phase === 1} />
+          {phase >= 2 && (
+            <span className="accent-text">
+              <TypingText text="opens PRs" started={phase >= 2} onComplete={() => setPhase(3)} showCursor={phase === 2} />
+            </span>
+          )}
+          <br />
+          {phase >= 3 && <TypingText text="while you sleep." started={phase >= 3} onComplete={() => setPhase(4)} showCursor={phase === 3} />}
         </h1>
         <p className="hero-desc">
-          Describe a code change in plain English. RepoMind clones the repository,
-          applies the changes via AI, and opens a pull request — all as your configured bot user.
+          <TypingText 
+            text="Describe a code change in plain English. RepoMind clones the repository, applies the changes via AI, and opens a pull request — all as your configured bot user." 
+            delay={15}
+            started={phase >= 4}
+            showCursor={phase === 4}
+          />
         </p>
         <div className="hero-cta">
           <Link to="/signup" className="btn-primary hero-btn">Start for free →</Link>
@@ -80,12 +125,14 @@ export default function LandingPage() {
           { icon: "📡", title: "Live status", desc: "Poll job status in real-time. See diffs, PR links, and step summaries as the agent works." },
         ].map((f) => (
           <div className="feature-card" key={f.title}>
+            <div className="feature-line"></div>
             <div className="feature-icon">{f.icon}</div>
             <h3>{f.title}</h3>
             <p>{f.desc}</p>
           </div>
         ))}
       </section>
+
 
       <footer className="landing-footer">
         <span>RepoMind — HackingTheRepo Team</span>
