@@ -1,0 +1,444 @@
+.landing {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 28px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Header ── */
+.landing-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.landing-header::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 180px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent3), transparent);
+  opacity: 0.5;
+}
+
+.landing-logo {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  letter-spacing: -0.03em;
+  transition: color 0.15s;
+}
+
+.landing-logo:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.landing-nav {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.landing-nav .theme-toggle {
+  height: 38px;
+}
+
+/* ── Hero ── */
+.hero {
+  position: relative;
+  z-index: 0;
+  padding: clamp(56px, 12vw, 90px) 0 clamp(48px, 8vw, 70px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Ambient glow behind hero */
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 400px;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--accent) 14%, transparent) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+  z-index: -1;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-glow2);
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+  padding: 5px 16px;
+  border-radius: 100px;
+  margin-bottom: 30px;
+  animation: fadeIn 0.5s ease both;
+}
+
+.hero-badge-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+  animation: pulse 2s ease infinite;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(38px, 6vw, 72px);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  color: var(--text);
+  margin-bottom: 22px;
+  animation: fadeIn 0.5s 0.1s ease both;
+}
+
+.accent-text {
+  color: var(--accent);
+  text-shadow: 0 0 42px color-mix(in srgb, var(--accent) 38%, transparent);
+  position: relative;
+}
+
+.hero-desc {
+  font-size: 16px;
+  color: var(--text2);
+  max-width: 520px;
+  line-height: 1.75;
+  margin-bottom: 36px;
+  animation: fadeIn 0.5s 0.2s ease both;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 64px;
+  animation: fadeIn 0.5s 0.3s ease both;
+}
+.hero-metrics {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+  max-width: 760px;
+}
+.metric-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  text-align: left;
+}
+.metric-card strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.metric-card span {
+  font-size: 12px;
+  color: var(--text2);
+}
+
+.hero-btn {
+  font-size: 14px !important;
+  padding: 13px 28px !important;
+  font-weight: 700 !important;
+}
+
+/* ── Terminal demo ── */
+.terminal-demo {
+  width: 100%;
+  max-width: 700px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow:
+    var(--shadow-lg),
+    0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent);
+  text-align: left;
+  animation: fadeInUp 0.6s 0.35s ease both;
+}
+
+.terminal-bar {
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot.red {
+  background: #ff5f56;
+}
+.dot.yellow {
+  background: #ffbd2e;
+}
+.dot.green {
+  background: #27c93f;
+}
+
+.terminal-title {
+  margin-left: 8px;
+  font-size: 11px;
+  color: var(--text3);
+  font-weight: 500;
+}
+
+.terminal-body {
+  padding: 20px 22px;
+}
+
+.t-line {
+  margin-bottom: 4px;
+  font-size: 12.5px;
+  line-height: 1.7;
+}
+.t-gap {
+  height: 10px;
+}
+.t-prompt {
+  color: var(--accent);
+  margin-right: 8px;
+}
+.t-cmd {
+  color: var(--text);
+}
+.t-in {
+  color: var(--text2);
+  padding-left: 2px;
+}
+.t-key {
+  color: var(--blue);
+}
+.t-val {
+  color: var(--yellow);
+}
+.t-out {
+  color: var(--text2);
+}
+.t-green {
+  color: var(--accent);
+  margin-right: 8px;
+}
+.t-link {
+  color: var(--blue);
+}
+
+/* Blinking cursor */
+.t-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 13px;
+  background: var(--accent);
+  vertical-align: middle;
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+  opacity: 0.8;
+}
+
+/* ── Features ── */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px;
+  padding: 48px 0 20px;
+}
+
+.feature-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 26px;
+  transition:
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-line {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.feature-line::before,
+.feature-line::after {
+  content: "";
+  position: absolute;
+  background: var(--yellow);
+  box-shadow: 0 0 10px var(--yellow);
+  transition: all 0.4s ease-in-out;
+  opacity: 0;
+}
+
+/* Top line */
+.feature-line::before {
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+}
+
+/* Bottom line */
+.feature-line::after {
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 2px;
+}
+
+.feature-card:hover .feature-line::before {
+  width: 100%;
+  opacity: 1;
+}
+
+.feature-card:hover .feature-line::after {
+  width: 100%;
+  opacity: 1;
+}
+
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 0.8em;
+  background: var(--accent);
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+  vertical-align: middle;
+}
+
+.feature-icon {
+  font-size: 26px;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.feature-card h3 {
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  font-weight: 700;
+  margin-bottom: 9px;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+.feature-card p {
+  font-size: 12.5px;
+  color: var(--text2);
+  line-height: 1.65;
+}
+
+/* ── Footer ── */
+.landing-footer {
+  margin-top: auto;
+  padding: 22px 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11.5px;
+  color: var(--text3);
+}
+
+@media (max-width: 860px) {
+  .landing {
+    padding-inline: 18px;
+  }
+
+  .landing-header {
+    gap: 12px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .landing-nav {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .landing-nav .theme-toggle,
+  .landing-nav a {
+    flex: 1 1 auto;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero {
+    padding-top: 64px;
+  }
+
+  .hero-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-footer {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .hero {
+    padding: 60px 0 48px;
+  }
+  .hero-cta {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-btn {
+    width: 100%;
+    text-align: center;
+  }
+  .landing-nav {
+    flex-direction: column;
+  }
+  .landing-nav .theme-toggle,
+  .landing-nav a {
+    width: 100%;
+  }
+}
