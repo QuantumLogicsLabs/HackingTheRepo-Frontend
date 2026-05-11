@@ -45,8 +45,8 @@
   display: inline-block;
   width: 13px;
   height: 13px;
-  border: 2px solid rgba(0, 0, 0, 0.2);
-  border-top-color: rgba(0, 0, 0, 0.6);
+  border: 2px solid color-mix(in srgb, var(--text) 18%, transparent);
+  border-top-color: var(--text);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
   margin-right: 6px;

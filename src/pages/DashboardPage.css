@@ -16,8 +16,8 @@
 
 .page-title {
   font-family: var(--font-display);
-  font-size: 24px;
-  font-weight: 800;
+  font-size: clamp(22px, 3vw, 26px);
+  font-weight: 600;
   letter-spacing: -0.03em;
   margin-bottom: 5px;
   color: var(--text);
@@ -64,7 +64,7 @@
   height: 60px;
   background: radial-gradient(
     ellipse at top right,
-    rgba(255, 255, 255, 0.03),
+    color-mix(in srgb, var(--text) 4%, transparent),
     transparent 70%
   );
   pointer-events: none;
@@ -159,8 +159,8 @@
   font-size: 13px;
   font-weight: 600;
   color: var(--blue);
-  background: rgba(92, 168, 255, 0.08);
-  border: 1px solid rgba(92, 168, 255, 0.12);
+  background: color-mix(in srgb, var(--blue) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--blue) 18%, transparent);
   padding: 2px 9px;
   border-radius: var(--radius);
   white-space: nowrap;
@@ -171,7 +171,7 @@
 }
 
 .job-row:hover .repo-name {
-  background: rgba(92, 168, 255, 0.13);
+  background: color-mix(in srgb, var(--blue) 15%, transparent);
 }
 
 .job-instruction {
@@ -213,12 +213,12 @@
   padding: 2px 8px;
   background: var(--accent-glow);
   border-radius: 4px;
-  border: 1px solid rgba(0, 245, 160, 0.15);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
   transition: background 0.15s;
 }
 
 .pr-link:hover {
-  background: rgba(0, 245, 160, 0.18);
+  background: var(--accent-glow);
   color: var(--accent);
 }
 

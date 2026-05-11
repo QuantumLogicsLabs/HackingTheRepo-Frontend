@@ -1,16 +1,25 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 import "./LandingPage.css";
 
+/**
+ * Typewriter effect — keeps parent `onComplete` stable via ref so inline callbacks
+ * do not restart the interval on every parent re-render (React StrictMode safe).
+ */
 const TypingText = ({ text, delay = 25, started = true, onComplete, className = "", showCursor = true }) => {
   const [displayedText, setDisplayedText] = useState("");
   const [isFinished, setIsFinished] = useState(false);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
-    if (!started || isFinished) return;
-    
+    if (!started) return;
+
     let index = 0;
+    setDisplayedText("");
+    setIsFinished(false);
+
     const timer = setInterval(() => {
       if (index < text.length) {
         setDisplayedText(text.slice(0, index + 1));
@@ -18,19 +27,19 @@ const TypingText = ({ text, delay = 25, started = true, onComplete, className = 
       } else {
         clearInterval(timer);
         setIsFinished(true);
-        if (onComplete) onComplete();
+        onCompleteRef.current?.();
       }
     }, delay);
-    
+
     return () => clearInterval(timer);
-  }, [text, delay, started, isFinished, onComplete]);
+  }, [text, delay, started]);
 
   if (!started && displayedText === "") return null;
 
   return (
     <span className={className}>
       {displayedText}
-      {!isFinished && showCursor && <span className="typing-cursor">|</span>}
+      {started && !isFinished && showCursor && <span className="typing-cursor">|</span>}
     </span>
   );
 };

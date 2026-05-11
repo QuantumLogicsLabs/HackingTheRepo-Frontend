@@ -83,7 +83,7 @@
   font-weight: 700;
   color: var(--accent);
   background: var(--accent-glow);
-  border: 1px solid rgba(0, 245, 160, 0.2);
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
   padding: 1px 8px;
   border-radius: 100px;
   margin-left: 8px;
@@ -134,7 +134,7 @@
   height: 8px;
   border-radius: 50%;
   background: var(--accent);
-  box-shadow: 0 0 8px rgba(0, 245, 160, 0.5);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 35%, transparent);
   animation: pulse 2s ease infinite;
   flex-shrink: 0;
 }

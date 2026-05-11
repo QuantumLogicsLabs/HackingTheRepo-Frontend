@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import StatusBadge from "../components/StatusBadge";
 import api from "../utils/api";
@@ -21,36 +21,46 @@ export default function JobDetailPage() {
   const [deleting, setDeleting] = useState(false);
   const pollingRef = useRef(null);
 
-  const fetchJob = async (poll = false) => {
-    try {
-      const endpoint = poll ? `/jobs/${id}/status` : `/jobs/${id}`;
-      const { data } = await api.get(endpoint);
-      setJob(data);
-      return data;
-    } catch {
-      navigate("/dashboard");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const fetchJob = useCallback(
+    async (poll = false) => {
+      try {
+        const endpoint = poll ? `/jobs/${id}/status` : `/jobs/${id}`;
+        const { data } = await api.get(endpoint);
+        setJob(data);
+        return data;
+      } catch {
+        navigate("/dashboard");
+        return undefined;
+      } finally {
+        setLoading(false);
+      }
+    },
+    [id, navigate]
+  );
 
   useEffect(() => {
+    setLoading(true);
     fetchJob();
-  }, [id]);
+  }, [id, fetchJob]);
 
-  // Poll if running
+  /** Poll while job is in progress; clear when terminal or unmount */
   useEffect(() => {
-    if (!job) return;
-    if (job.status === "running" || job.status === "queued") {
-      pollingRef.current = setInterval(async () => {
-        const updated = await fetchJob(true);
-        if (updated?.status === "completed" || updated?.status === "failed") {
-          clearInterval(pollingRef.current);
-        }
-      }, 5000);
-    }
-    return () => clearInterval(pollingRef.current);
-  }, [job?.status]);
+    const status = job?.status;
+    if (status !== "running" && status !== "queued") return;
+
+    pollingRef.current = window.setInterval(async () => {
+      const updated = await fetchJob(true);
+      if (updated?.status === "completed" || updated?.status === "failed") {
+        clearInterval(pollingRef.current);
+        pollingRef.current = null;
+      }
+    }, 5000);
+
+    return () => {
+      clearInterval(pollingRef.current);
+      pollingRef.current = null;
+    };
+  }, [job?.status, fetchJob]);
 
   const handleRefine = async () => {
     if (!refineText.trim()) return;
@@ -67,8 +77,14 @@ export default function JobDetailPage() {
   const handleDelete = async () => {
     if (!confirm("Delete this job?")) return;
     setDeleting(true);
-    await api.delete(`/jobs/${id}`);
-    navigate("/dashboard");
+    try {
+      await api.delete(`/jobs/${id}`);
+      navigate("/dashboard");
+    } catch {
+      alert("Could not delete this job. Try again.");
+    } finally {
+      setDeleting(false);
+    }
   };
 
   if (loading) return (
