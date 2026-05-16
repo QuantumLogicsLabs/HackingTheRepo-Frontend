@@ -1,6 +1,10 @@
 import { useTheme } from "../context/ThemeContext";
 
-export default function ThemeToggle({ className = "" }) {
+interface ThemeToggleProps {
+  className?: string;
+}
+
+export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
   const { theme, toggleTheme } = useTheme();
 
   return (

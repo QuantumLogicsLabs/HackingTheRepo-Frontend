@@ -1,25 +1,50 @@
-import { useState } from "react";
+import {
+  useState,
+  type FormEventHandler,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import ThemeToggle from "../components/ThemeToggle";
 import "./AuthPage.css";
 
-export function LoginPage() {
+interface LoginForm {
+  email: string;
+  password: string;
+}
+
+interface SignupForm extends LoginForm {
+  username: string;
+}
+
+interface AuthLayoutProps {
+  title: string;
+  sub: string;
+  children: ReactNode;
+}
+
+function getErrorMessage(err: unknown, fallback: string): string {
+  const error = err as { response?: { data?: { message?: string } }; message?: string };
+  return error.response?.data?.message || error.message || fallback;
+}
+
+export function LoginPage(): ReactElement {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState<LoginForm>({ email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handle = async (e) => {
+  const handle: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
       await login(form.email, form.password);
       navigate("/dashboard");
-    } catch (err) {
-      setError(err.response?.data?.message || err.message || "Login failed");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Login failed"));
     } finally {
       setLoading(false);
     }
@@ -53,14 +78,14 @@ export function LoginPage() {
   );
 }
 
-export function SignupPage() {
+export function SignupPage(): ReactElement {
   const { signup } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [form, setForm] = useState<SignupForm>({ username: "", email: "", password: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handle = async (e) => {
+  const handle: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     setError("");
     if (form.password.length < 6) { setError("Password must be at least 6 characters"); return; }
@@ -68,8 +93,8 @@ export function SignupPage() {
     try {
       await signup(form.username, form.email, form.password);
       navigate("/dashboard");
-    } catch (err) {
-      setError(err.response?.data?.message || err.message || "Signup failed");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err, "Signup failed"));
     } finally {
       setLoading(false);
     }
@@ -105,7 +130,7 @@ export function SignupPage() {
   );
 }
 
-function AuthLayout({ title, sub, children }) {
+function AuthLayout({ title, sub, children }: AuthLayoutProps): ReactElement {
   return (
     <div className="auth-page">
       <div className="auth-topbar">

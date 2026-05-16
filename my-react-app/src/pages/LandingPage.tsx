@@ -1,13 +1,29 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, type ReactElement } from "react";
 import { Link } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
 import "./LandingPage.css";
+
+interface TypingTextProps {
+  text: string;
+  delay?: number;
+  started?: boolean;
+  onComplete?: () => void;
+  className?: string;
+  showCursor?: boolean;
+}
 
 /**
  * Typewriter effect — keeps parent `onComplete` stable via ref so inline callbacks
  * do not restart the interval on every parent re-render (React StrictMode safe).
  */
-const TypingText = ({ text, delay = 25, started = true, onComplete, className = "", showCursor = true }) => {
+const TypingText = ({
+  text,
+  delay = 25,
+  started = true,
+  onComplete,
+  className = "",
+  showCursor = true,
+}: TypingTextProps): ReactElement | null => {
   const [displayedText, setDisplayedText] = useState("");
   const [isFinished, setIsFinished] = useState(false);
   const onCompleteRef = useRef(onComplete);
@@ -44,7 +60,7 @@ const TypingText = ({ text, delay = 25, started = true, onComplete, className = 
   );
 };
 
-export default function LandingPage() {
+export default function LandingPage(): ReactElement {
   const [phase, setPhase] = useState(0);
 
   return (

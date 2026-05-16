@@ -1,7 +1,27 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
 import api from "../utils/api";
+import type { ApiErrorResponse, AuthResponse, AuthUser, LocalUser } from "../types";
 
-const AuthContext = createContext(null);
+interface AuthContextValue {
+  user: AuthUser | null;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<AuthResponse>;
+  signup: (username: string, email: string, password: string) => Promise<AuthResponse>;
+  logout: () => void;
+  refreshUser: () => Promise<AuthUser | null>;
+}
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 const STORAGE_KEYS = {
   token: "rm_token",
@@ -16,7 +36,7 @@ const DEMO_USER = {
   password: "demo1234",
 };
 
-function readJson(key, fallback) {
+function readJson<T>(key: string, fallback: T): T {
   try {
     const value = localStorage.getItem(key);
     return value ? JSON.parse(value) : fallback;
@@ -25,18 +45,20 @@ function readJson(key, fallback) {
   }
 }
 
-function writeJson(key, value) {
+function writeJson<T>(key: string, value: T): void {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
-function stripSensitive(user) {
+function stripSensitive(
+  user: (AuthUser & { password?: string }) | null | undefined
+): AuthUser | null {
   if (!user) return null;
   const { password, ...safeUser } = user;
   return safeUser;
 }
 
-function ensureLocalUsers() {
-  const storedUsers = readJson(STORAGE_KEYS.users, null);
+function ensureLocalUsers(): LocalUser[] {
+  const storedUsers = readJson<LocalUser[] | null>(STORAGE_KEYS.users, null);
   if (Array.isArray(storedUsers) && storedUsers.length > 0) {
     return storedUsers;
   }
@@ -46,28 +68,29 @@ function ensureLocalUsers() {
   return seededUsers;
 }
 
-function shouldUseLocalFallback(error) {
-  return !error?.response || error.response.status >= 500;
+function shouldUseLocalFallback(error: unknown): boolean {
+  const apiError = error as ApiErrorResponse;
+  return !apiError.response || (apiError.response.status ?? 0) >= 500;
 }
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+export function AuthProvider({ children }: AuthProviderProps) {
+  const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem(STORAGE_KEYS.token);
-    const cachedUser = readJson(STORAGE_KEYS.user, null);
+    const cachedUser = readJson<AuthUser | null>(STORAGE_KEYS.user, null);
     if (token) {
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       api.get("/auth/me")
         .then((r) => {
-          const nextUser = stripSensitive(r.data);
+          const nextUser = stripSensitive(r.data as AuthUser);
           if (nextUser) {
             writeJson(STORAGE_KEYS.user, nextUser);
             setUser(nextUser);
           }
         })
-        .catch((error) => {
+        .catch((error: unknown) => {
           if (shouldUseLocalFallback(error) && cachedUser) {
             api.defaults.headers.common["Authorization"] = "Bearer local-session";
             setUser(cachedUser);
@@ -88,10 +111,10 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (email: string, password: string): Promise<AuthResponse> => {
     try {
       const { data } = await api.post("/auth/login", { email, password });
-      const nextUser = stripSensitive(data.user);
+      const nextUser = stripSensitive(data.user as LocalUser | AuthUser);
       localStorage.setItem(STORAGE_KEYS.token, data.token);
       api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
       if (nextUser) {
@@ -99,7 +122,7 @@ export function AuthProvider({ children }) {
         setUser(nextUser);
       }
       return { ...data, user: nextUser };
-    } catch (error) {
+    } catch (error: unknown) {
       if (!shouldUseLocalFallback(error)) throw error;
 
       const localUsers = ensureLocalUsers();
@@ -122,10 +145,14 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const signup = async (username, email, password) => {
+  const signup = async (
+    username: string,
+    email: string,
+    password: string
+  ): Promise<AuthResponse> => {
     try {
       const { data } = await api.post("/auth/signup", { username, email, password });
-      const nextUser = stripSensitive(data.user);
+      const nextUser = stripSensitive(data.user as LocalUser | AuthUser);
       localStorage.setItem(STORAGE_KEYS.token, data.token);
       api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
       if (nextUser) {
@@ -133,7 +160,7 @@ export function AuthProvider({ children }) {
         setUser(nextUser);
       }
       return { ...data, user: nextUser };
-    } catch (error) {
+    } catch (error: unknown) {
       if (!shouldUseLocalFallback(error)) throw error;
 
       const localUsers = ensureLocalUsers();
@@ -159,17 +186,17 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const logout = () => {
+  const logout = (): void => {
     localStorage.removeItem(STORAGE_KEYS.token);
     localStorage.removeItem(STORAGE_KEYS.user);
     delete api.defaults.headers.common["Authorization"];
     setUser(null);
   };
 
-  const refreshUser = async () => {
+  const refreshUser = async (): Promise<AuthUser | null> => {
     try {
       const { data } = await api.get("/auth/me");
-      const nextUser = stripSensitive(data);
+      const nextUser = stripSensitive(data as AuthUser);
       if (nextUser) {
         writeJson(STORAGE_KEYS.user, nextUser);
         setUser(nextUser);
@@ -177,7 +204,7 @@ export function AuthProvider({ children }) {
       return nextUser;
     } catch (error) {
       if (shouldUseLocalFallback(error)) {
-        const cachedUser = readJson(STORAGE_KEYS.user, null);
+        const cachedUser = readJson<AuthUser | null>(STORAGE_KEYS.user, null);
         if (cachedUser) {
           setUser(cachedUser);
           return cachedUser;
@@ -195,4 +222,10 @@ export function AuthProvider({ children }) {
   );
 }
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = (): AuthContextValue => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+  return context;
+};

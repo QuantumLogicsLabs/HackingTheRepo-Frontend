@@ -1,11 +1,18 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  type MouseEventHandler,
+} from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import StatusBadge from "../components/StatusBadge";
 import api from "../utils/api";
+import type { Job } from "../types";
 import "./JobDetailPage.css";
 
-function timeAgo(date) {
-  const seconds = Math.floor((Date.now() - new Date(date)) / 1000);
+function timeAgo(date: string): string {
+  const seconds = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
   if (seconds < 60) return `${seconds}s ago`;
   if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
   return `${Math.floor(seconds / 3600)}h ago`;
@@ -14,20 +21,21 @@ function timeAgo(date) {
 export default function JobDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [job, setJob] = useState(null);
+  const [job, setJob] = useState<Job | null>(null);
   const [loading, setLoading] = useState(true);
   const [refineText, setRefineText] = useState("");
   const [refining, setRefining] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const pollingRef = useRef(null);
+  const pollingRef = useRef<number | null>(null);
 
   const fetchJob = useCallback(
-    async (poll = false) => {
+    async (poll = false): Promise<Job | undefined> => {
       try {
         const endpoint = poll ? `/jobs/${id}/status` : `/jobs/${id}`;
         const { data } = await api.get(endpoint);
-        setJob(data);
-        return data;
+        const nextJob = data as Job;
+        setJob(nextJob);
+        return nextJob;
       } catch {
         navigate("/dashboard");
         return undefined;
@@ -51,30 +59,30 @@ export default function JobDetailPage() {
     pollingRef.current = window.setInterval(async () => {
       const updated = await fetchJob(true);
       if (updated?.status === "completed" || updated?.status === "failed") {
-        clearInterval(pollingRef.current);
+        if (pollingRef.current !== null) clearInterval(pollingRef.current);
         pollingRef.current = null;
       }
     }, 5000);
 
     return () => {
-      clearInterval(pollingRef.current);
+      if (pollingRef.current !== null) clearInterval(pollingRef.current);
       pollingRef.current = null;
     };
   }, [job?.status, fetchJob]);
 
-  const handleRefine = async () => {
+  const handleRefine: MouseEventHandler<HTMLButtonElement> = async () => {
     if (!refineText.trim()) return;
     setRefining(true);
     try {
       const { data } = await api.post(`/jobs/${id}/refine`, { instruction: refineText });
-      setJob(data);
+      setJob(data as Job);
       setRefineText("");
     } finally {
       setRefining(false);
     }
   };
 
-  const handleDelete = async () => {
+  const handleDelete: MouseEventHandler<HTMLButtonElement> = async () => {
     if (!confirm("Delete this job?")) return;
     setDeleting(true);
     try {
@@ -218,11 +226,11 @@ export default function JobDetailPage() {
           )}
 
           {/* Refinement history */}
-          {job.refinements?.length > 0 && (
+          {(job.refinements?.length ?? 0) > 0 && (
             <div className="card">
               <h3 className="refine-title">Refinement History</h3>
               <div className="refinement-list">
-                {job.refinements.map((r, i) => (
+                {job.refinements?.map((r, i) => (
                   <div key={i} className="refinement-item">
                     <span className="ref-num">#{i + 1}</span>
                     <div>

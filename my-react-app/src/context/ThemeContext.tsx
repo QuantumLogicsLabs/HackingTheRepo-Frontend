@@ -1,9 +1,30 @@
-import { createContext, useContext, useLayoutEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useLayoutEffect,
+  useMemo,
+  useState,
+  type Dispatch,
+  type ReactNode,
+  type SetStateAction,
+} from "react";
 
 const STORAGE_KEY = "rm_theme";
-const ThemeContext = createContext(null);
+export type Theme = "light" | "dark";
 
-function getPreferredTheme() {
+interface ThemeContextValue {
+  theme: Theme;
+  setTheme: Dispatch<SetStateAction<Theme>>;
+  toggleTheme: () => void;
+}
+
+interface ThemeProviderProps {
+  children: ReactNode;
+}
+
+const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
+
+function getPreferredTheme(): Theme {
   if (typeof window === "undefined") return "light";
   const stored = window.localStorage.getItem(STORAGE_KEY);
   if (stored === "light" || stored === "dark") return stored;
@@ -11,7 +32,7 @@ function getPreferredTheme() {
   return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
-export function ThemeProvider({ children }) {
+export function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme, setTheme] = useState(getPreferredTheme);
 
   /* useLayoutEffect: apply theme before paint to avoid wrong-token flash */
@@ -33,4 +54,10 @@ export function ThemeProvider({ children }) {
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 
-export const useTheme = () => useContext(ThemeContext);
+export const useTheme = (): ThemeContextValue => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error("useTheme must be used within ThemeProvider");
+  }
+  return context;
+};
