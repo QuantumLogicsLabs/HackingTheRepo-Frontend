@@ -32,7 +32,7 @@
   height: 500px;
   background: radial-gradient(
     ellipse,
-    rgba(0, 245, 160, 0.06) 0%,
+    color-mix(in srgb, var(--accent) 10%, transparent) 0%,
     transparent 65%
   );
   pointer-events: none;
@@ -49,7 +49,7 @@
   height: 400px;
   background: radial-gradient(
     ellipse at bottom right,
-    rgba(92, 168, 255, 0.04),
+    color-mix(in srgb, var(--blue) 8%, transparent),
     transparent 60%
   );
   pointer-events: none;
@@ -96,7 +96,7 @@
   border: 1px solid var(--border2);
   box-shadow:
     var(--shadow-lg),
-    0 0 0 1px rgba(0, 245, 160, 0.04),
+    0 0 0 1px color-mix(in srgb, var(--accent) 8%, transparent),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 

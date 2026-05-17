@@ -47,19 +47,15 @@
 .logo-icon {
   width: 34px;
   height: 34px;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 245, 160, 0.15),
-    rgba(0, 245, 160, 0.05)
-  );
-  border: 1px solid rgba(0, 245, 160, 0.25);
+  background: linear-gradient(135deg, var(--accent-glow), var(--accent-glow2));
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
   border-radius: 9px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow:
-    0 0 12px rgba(0, 245, 160, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    var(--shadow-accent-sm),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
   flex-shrink: 0;
 }
 
@@ -116,9 +112,9 @@
 }
 
 .nav-item.active {
-  background: rgba(0, 245, 160, 0.07);
+  background: var(--accent-glow2);
   color: var(--accent);
-  border-color: rgba(0, 245, 160, 0.15);
+  border-color: color-mix(in srgb, var(--accent) 22%, transparent);
   font-weight: 600;
 }
 
@@ -133,7 +129,7 @@
   width: 2px;
   background: var(--accent);
   border-radius: 0 2px 2px 0;
-  box-shadow: 0 0 8px rgba(0, 245, 160, 0.6);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 45%, transparent);
 }
 
 .nav-icon {
