@@ -1,18 +1,30 @@
-import { useState } from "react";
+import { useState, type ChangeEventHandler, type FormEventHandler } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../utils/api";
 import "./NewJobPage.css";
+
+interface NewJobForm {
+  repoUrl: string;
+  instruction: string;
+  branchName: string;
+  prTitle: string;
+}
+
+interface Example {
+  label: string;
+  instruction: string;
+}
 
 const EXAMPLES = [
   { label: "Async refactor", instruction: "Refactor all database calls in src/db/ to use async/await" },
   { label: "Add type hints", instruction: "Add TypeScript type hints to all exported functions" },
   { label: "Write tests", instruction: "Write unit tests for all functions in utils/ folder" },
   { label: "Add README", instruction: "Create a comprehensive README.md with setup and usage instructions" },
-];
+] satisfies Example[];
 
 export default function NewJobPage() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<NewJobForm>({
     repoUrl: "",
     instruction: "",
     branchName: "",
@@ -21,13 +33,16 @@ export default function NewJobPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+  const set =
+    (k: keyof NewJobForm): ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> =>
+    (e) =>
+      setForm({ ...form, [k]: e.target.value });
 
-  const autoSlug = (str) =>
+  const autoSlug = (str: string): string =>
     "repomind/" +
     str.toLowerCase().replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").slice(0, 50);
 
-  const applyExample = (ex) => {
+  const applyExample = (ex: Example): void => {
     setForm((f) => ({
       ...f,
       instruction: ex.instruction,
@@ -36,7 +51,7 @@ export default function NewJobPage() {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     setError("");
     if (!form.repoUrl.startsWith("https://github.com/")) {
@@ -47,8 +62,9 @@ export default function NewJobPage() {
     try {
       const { data } = await api.post("/jobs", form);
       navigate(`/jobs/${data._id}`);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to create job");
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setError(error.response?.data?.message || "Failed to create job");
     } finally {
       setLoading(false);
     }

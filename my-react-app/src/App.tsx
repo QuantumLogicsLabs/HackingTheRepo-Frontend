@@ -2,6 +2,7 @@
  * Routes: public landing + auth; private app shell uses a pathless layout route
  * so `/` stays the marketing page and `/dashboard`, `/jobs/*`, `/settings` stay nested.
  */
+import type { ReactElement } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -14,8 +15,12 @@ import NewJobPage from "./pages/NewJobPage";
 import JobDetailPage from "./pages/JobDetailPage";
 import SettingsPage from "./pages/SettingsPage";
 
+interface RouteWrapperProps {
+  children: ReactElement;
+}
+
 /** Full-viewport loading shell — matches luxury theme, avoids blank flashes on public routes */
-function AuthLoadingScreen() {
+function AuthLoadingScreen(): ReactElement {
   return (
     <div className="app-auth-loading" role="status" aria-live="polite" aria-label="Loading">
       <div className="app-auth-loading__inner">
@@ -26,19 +31,19 @@ function AuthLoadingScreen() {
   );
 }
 
-function PrivateRoute({ children }) {
+function PrivateRoute({ children }: RouteWrapperProps): ReactElement {
   const { user, loading } = useAuth();
   if (loading) return <AuthLoadingScreen />;
   return user ? children : <Navigate to="/login" replace />;
 }
 
-function PublicRoute({ children }) {
+function PublicRoute({ children }: RouteWrapperProps): ReactElement {
   const { user, loading } = useAuth();
   if (loading) return <AuthLoadingScreen />;
   return user ? <Navigate to="/dashboard" replace /> : children;
 }
 
-export default function App() {
+export default function App(): ReactElement {
   return (
     <ThemeProvider>
       <AuthProvider>

@@ -1,27 +1,44 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ChangeEventHandler, type FormEventHandler } from "react";
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
+import type { Settings } from "../types";
 import "./SettingsPage.css";
+
+type SettingsForm = Pick<Settings, "githubUsername" | "githubToken" | "openaiKey">;
+
+interface TokenVisibility {
+  github: boolean;
+  openai: boolean;
+}
 
 export default function SettingsPage() {
   const { user, refreshUser } = useAuth();
-  const [settings, setSettings] = useState({ githubUsername: "", githubToken: "", openaiKey: "", hasGithubToken: false, hasOpenaiKey: false });
-  const [form, setForm] = useState({ githubUsername: "", githubToken: "", openaiKey: "" });
+  const [settings, setSettings] = useState<Settings>({
+    githubUsername: "",
+    githubToken: "",
+    openaiKey: "",
+    hasGithubToken: false,
+    hasOpenaiKey: false,
+  });
+  const [form, setForm] = useState<SettingsForm>({ githubUsername: "", githubToken: "", openaiKey: "" });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
-  const [showTokens, setShowTokens] = useState({ github: false, openai: false });
+  const [showTokens, setShowTokens] = useState<TokenVisibility>({ github: false, openai: false });
 
   useEffect(() => {
     api.get("/settings").then(({ data }) => {
-      setSettings(data);
+      setSettings(data as Settings);
       setForm({ githubUsername: data.githubUsername, githubToken: "", openaiKey: "" });
     });
   }, []);
 
-  const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+  const set =
+    (k: keyof SettingsForm): ChangeEventHandler<HTMLInputElement> =>
+    (e) =>
+      setForm({ ...form, [k]: e.target.value });
 
-  const handleSave = async (e) => {
+  const handleSave: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     setSaving(true);
     setError("");
@@ -32,10 +49,11 @@ export default function SettingsPage() {
       setSaved(true);
       setForm((f) => ({ ...f, githubToken: "", openaiKey: "" }));
       const { data } = await api.get("/settings");
-      setSettings(data);
+      setSettings(data as Settings);
       setTimeout(() => setSaved(false), 3000);
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to save");
+    } catch (err: unknown) {
+      const error = err as { response?: { data?: { message?: string } } };
+      setError(error.response?.data?.message || "Failed to save");
     } finally {
       setSaving(false);
     }
