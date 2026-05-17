@@ -8,3 +8,6 @@ dist/
 .txtconfig
 .txtignore
 HackingTheRepo.txt
+
+# make-folder-txt
+frontend.txt
