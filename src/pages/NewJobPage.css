@@ -17,6 +17,97 @@
   flex-direction: column;
 }
 
+.assistant-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0 6px;
+}
+
+.assistant-btn {
+  padding: 8px 12px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+}
+
+.assistant-btn.assistant-pulse {
+  animation: assistantPulse 2s ease-in-out infinite;
+  box-shadow: 0 0 0 0 rgba(62, 222, 251, 0.705);
+}
+
+.assistant-btn.assistant-pulse:hover {
+  animation-play-state: paused;
+}
+
+@keyframes assistantPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(90, 204, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 14px rgba(90, 204, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(90, 204, 255, 0);
+  }
+}
+
+.assistant-hint {
+  color: var(--text3);
+  font-size: 12px;
+}
+
+.assistant-card {
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.assistant-card-open {
+  box-shadow: 0 0 0 2px rgba(90, 204, 255, 0.35);
+  border-color: rgba(90, 204, 255, 0.55);
+}
+
+.assistant-card-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.assistant-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.assistant-card-sub {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.assistant-text {
+  color: var(--text2);
+  line-height: 1.6;
+  margin-bottom: 14px;
+  white-space: pre-wrap;
+}
+
+.assistant-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.assistant-refresh {
+  font-size: 12px;
+  padding: 6px 10px;
+}
+
 .optional {
   font-size: 10px;
   color: var(--text3);
@@ -172,7 +263,7 @@
 }
 
 .bot-note code {
-  color: var(--yellow);
+  color: var(--blue);
   background: var(--bg4);
   padding: 1px 5px;
   border-radius: 4px;

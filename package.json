@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint . --ext .ts,.tsx",
+    "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
     "axios": "^1.7.2",
@@ -14,7 +16,18 @@
     "react-router-dom": "^6.24.0"
   },
   "devDependencies": {
+    "@types/node": "^25.8.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@types/react-router-dom": "^6.4.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "vite": "^5.4.21"
+    "eslint": "^8.56.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "typescript": "^6.0.3",
+    "vite": "^5.4.21",
+    "vitest": "^1.4.0"
   }
 }
