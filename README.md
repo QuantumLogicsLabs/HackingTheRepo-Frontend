@@ -178,7 +178,6 @@ VITE_API_URL=https://your-backend.vercel.app
 ### GitHub OAuth backend
 
 This repo can also run a local auth backend that supports GitHub OAuth and settings persistence.
-
 To start the backend server locally:
 
 ```bash
@@ -264,8 +263,6 @@ If your backend supports it, point `VITE_API_URL` at your API server and use job
 
 ---
 
-## Scripts
-
 ```bash
 npm run dev       # Hot-reloading dev server
 npm run build     # Production bundle → /dist
@@ -275,9 +272,6 @@ npm run test      # Vitest test suite
 ```
 
 ---
-
-## CI/CD
-
 GitHub Actions runs tests, linting, and a production build on every pull request to `main` and every push to `main`.
 Successful pushes to `main` are deployed to Vercel production automatically.
 
