@@ -1,0 +1,99 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-lint-build:
+    name: Test, lint, and build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Build production bundle
+        run: npm run build
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+          VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
+          VITE_SENTRY_ENVIRONMENT: production
+          VITE_SENTRY_RELEASE: ${{ github.sha }}
+          VITE_SENTRY_TRACES_SAMPLE_RATE: ${{ vars.VITE_SENTRY_TRACES_SAMPLE_RATE }}
+          VITE_OTEL_TRACES_ENDPOINT: ${{ vars.VITE_OTEL_TRACES_ENDPOINT }}
+          VITE_OTEL_SERVICE_NAME: ${{ vars.VITE_OTEL_SERVICE_NAME }}
+          VITE_OTEL_ENVIRONMENT: production
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_RELEASE: ${{ github.sha }}
+
+  deploy:
+    name: Deploy to Vercel
+    needs: test-lint-build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production bundle
+        run: |
+          npm run build
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
+          VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
+          VITE_SENTRY_ENVIRONMENT: production
+          VITE_SENTRY_RELEASE: ${{ github.sha }}
+          VITE_SENTRY_TRACES_SAMPLE_RATE: ${{ vars.VITE_SENTRY_TRACES_SAMPLE_RATE }}
+          VITE_OTEL_TRACES_ENDPOINT: ${{ vars.VITE_OTEL_TRACES_ENDPOINT }}
+          VITE_OTEL_SERVICE_NAME: ${{ vars.VITE_OTEL_SERVICE_NAME }}
+          VITE_OTEL_ENVIRONMENT: production
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+          SENTRY_RELEASE: ${{ github.sha }}
+
+      - name: Deploy to Vercel
+        uses: vercel/action@v3
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          prod: true
+          confirm: true

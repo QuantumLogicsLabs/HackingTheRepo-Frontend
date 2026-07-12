@@ -1,0 +1,50 @@
+{
+  "name": "repomind-client",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "dev:api": "node server.js",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "metrics": "node metrics-server.js"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.1",
+    "@opentelemetry/context-zone": "^2.7.1",
+    "@opentelemetry/core": "^2.7.1",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.218.0",
+    "@opentelemetry/instrumentation": "^0.218.0",
+    "@opentelemetry/instrumentation-document-load": "^0.63.0",
+    "@opentelemetry/instrumentation-fetch": "^0.218.0",
+    "@opentelemetry/instrumentation-xml-http-request": "^0.218.0",
+    "@opentelemetry/resources": "^2.7.1",
+    "@opentelemetry/sdk-trace-base": "^2.7.1",
+    "@opentelemetry/sdk-trace-web": "^2.7.1",
+    "@opentelemetry/semantic-conventions": "^1.41.1",
+    "@sentry/react": "^8.45.0",
+    "@sentry/tracing": "^7.120.4",
+    "axios": "^1.7.2",
+    "eslint-config-next": "^15.5.20",
+    "express": "^4.18.2",
+    "next": "^15.5.20",
+    "prom-client": "^14.0.1",
+    "react": "^18.3.1",
+    "react-diff-viewer-continued": "^4.3.0",
+    "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.6.0",
+    "recharts": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/eslint-plugin": "^7.3.0",
+    "@typescript-eslint/parser": "^7.3.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "typescript": "5.5.4"
+  }
+}

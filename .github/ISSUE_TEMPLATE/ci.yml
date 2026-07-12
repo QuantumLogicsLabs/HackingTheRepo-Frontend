@@ -1,0 +1,9 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: 💬 Discussion & Questions
+    url: https://github.com/your-org/HackingTheRepo/discussions
+    about: Ask questions and discuss ideas with the community here, not in issues.
+  - name: 🔒 Security Vulnerability
+    url: https://github.com/your-org/HackingTheRepo/blob/main/frontend/SECURITY.md
+    about: Please read our Security Policy before reporting a vulnerability privately.

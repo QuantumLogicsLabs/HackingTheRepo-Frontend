@@ -1,0 +1,31 @@
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.analytics-card {
+  padding: 18px;
+  min-height: 280px;
+  min-width: 0;
+}
+
+.analytics-card:last-child {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 900px) {
+  .analytics-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .analytics-card:last-child {
+    grid-column: auto;
+  }
+
+  .analytics-card {
+    min-height: 240px;
+    padding: 16px;
+  }
+}

@@ -1,0 +1,85 @@
+.diff-viewer-wrapper {
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.diff-viewer-toggle {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.diff-toggle-btn {
+  padding: 5px 14px;
+  font-size: 12px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text3);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.diff-toggle-btn:hover {
+  border-color: var(--border2);
+  color: var(--text2);
+}
+
+.diff-toggle-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.diff-viewer-container {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.diff-file-section + .diff-file-section {
+  border-top: 1px solid var(--border);
+}
+
+.diff-file-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text2);
+}
+
+.diff-plain-fallback {
+  padding: 14px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 12px;
+  font-family: var(--font-mono);
+  color: var(--text2);
+  white-space: pre-wrap;
+  word-break: break-all;
+  line-height: 1.6;
+}
+
+/* Override react-diff-viewer-continued table to fill width */
+.diff-viewer-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.diff-viewer-container td {
+  white-space: pre;
+}
+
+.diff-viewer-container pre {
+  margin: 0;
+  font-family: var(--font-mono);
+}

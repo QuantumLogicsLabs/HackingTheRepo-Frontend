@@ -1,0 +1,15 @@
+node_modules/
+.env
+dist/
+.next/
+.DS_Store
+*.log
+auth-data.json
+
+
+.txtconfig
+.txtignore
+HackingTheRepo.txt
+
+# make-folder-txt
+frontend.txt

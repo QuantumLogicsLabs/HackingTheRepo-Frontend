@@ -1,0 +1,13 @@
+@import "../src/index.css";
+@import "../src/views/LandingPage.css";
+@import "../src/views/DashboardPage.css";
+@import "../src/views/NewJobPage.css";
+@import "../src/views/JobDetailPage.css";
+@import "../src/views/SettingsPage.css";
+@import "../src/views/AnalyticsPage.css";
+@import "../src/views/AuthPage.css";
+@import "../src/components/Layout.css";
+@import "../src/components/Toast.css";
+@import "../src/components/NotificationBell.css";
+@import "../src/components/DiffViewer.css";
+@import "../src/components/AiHelper.css";

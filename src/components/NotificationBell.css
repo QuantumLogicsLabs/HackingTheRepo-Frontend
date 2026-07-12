@@ -1,0 +1,237 @@
+.notif-bell { position: relative; }
+
+.bell-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 8px;
+  border-radius: 8px;
+  position: relative;
+  cursor: pointer;
+  color: var(--text3);
+  transition: background 0.15s, color 0.15s;
+}
+.bell-btn:hover {
+  background: var(--bg4);
+  color: var(--text2);
+}
+.bell-btn--has-unread {
+  color: var(--accent);
+}
+.bell-btn--has-unread:hover {
+  color: var(--accent);
+}
+
+/* Badge */
+.bell-count {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 18px;
+  height: 18px;
+  background: var(--red);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  border-radius: 999px;
+  line-height: 1;
+  animation: bell-pop 0.25s ease-out;
+}
+
+@keyframes bell-pop {
+  0% { transform: scale(0); }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* Dropdown */
+.bell-dropdown {
+  position: absolute;
+  right: 0;
+  top: 42px;
+  width: min(360px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  z-index: 999;
+  animation: bell-slide-in 0.18s ease-out;
+}
+
+@keyframes bell-slide-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Header */
+.bell-header {
+  padding: 12px 14px;
+  font-weight: 700;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg3);
+}
+
+.bell-header-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.bell-action {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text3);
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+.bell-action:hover {
+  background: var(--bg4);
+  color: var(--text2);
+}
+.bell-action--danger:hover {
+  color: var(--red);
+  border-color: var(--red);
+}
+
+/* List */
+.bell-list {
+  max-height: 380px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px;
+}
+
+/* Item */
+.bell-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.12s;
+  position: relative;
+}
+.bell-item:hover {
+  background: var(--bg3);
+}
+.bell-item--unread {
+  background: var(--accent-glow2);
+}
+.bell-item--read {
+  opacity: 0.65;
+}
+.bell-item--read:hover {
+  opacity: 1;
+}
+
+/* Kind icon */
+.bell-item-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  margin-top: 1px;
+}
+.bell-item-icon--success {
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+}
+.bell-item-icon--error {
+  background: rgba(240, 72, 72, 0.12);
+  color: var(--red);
+}
+.bell-item-icon--warning {
+  background: rgba(199, 169, 75, 0.12);
+  color: var(--yellow);
+}
+.bell-item-icon--info {
+  background: var(--accent-glow);
+  color: var(--accent);
+}
+
+/* Content */
+.bell-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.bell-item-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.bell-item-title {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bell-item-time {
+  font-size: 11px;
+  color: var(--text3);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bell-item-body {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 3px;
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Unread dot */
+.bell-item-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  margin-top: 5px;
+  animation: bell-dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes bell-dot-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Empty state */
+.bell-empty {
+  padding: 28px 16px;
+  color: var(--text3);
+  text-align: center;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
