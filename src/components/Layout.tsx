@@ -1,9 +1,11 @@
-import { useEffect, useState, type MouseEventHandler, type ReactElement } from "react";
+import { type MouseEventHandler, type ReactElement, useState } from "react";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useKeyboardShortcuts } from "../useKeyboardShortcuts";
 import ThemeToggle from "./ThemeToggle";
 import NotificationBell from "./NotificationBell";
 import Toasts from "./Toast";
+import ShortcutsHelpModal from "./ShortcutsHelpModal";
 import "./Layout.css";
 
 interface NavLinkState {
@@ -23,36 +25,11 @@ export default function Layout(): ReactElement {
     navigate("/");
   };
   //
-  useEffect(() => {
-  const handleKeyDown = (e: KeyboardEvent) => {
-    const tag = (e.target as HTMLElement)?.tagName;
-    if (
-      tag === "INPUT" ||
-      tag === "TEXTAREA" ||
-      (e.target as HTMLElement)?.isContentEditable
-    ) {
-      return;
-    }
-
-    if (e.key.toLowerCase() === "n") {
-      navigate("/jobs/new");
-    }
-
-    if (e.key.toLowerCase() === "d") {
-      navigate("/dashboard");
-    }
-
-    if (e.key === "?") {
-      setShowShortcuts((prev) => !prev);
-    }
-  };
-
-  window.addEventListener("keydown", handleKeyDown);
-
-  return () => {
-    window.removeEventListener("keydown", handleKeyDown);
-  };
-}, [navigate]);
+  useKeyboardShortcuts({
+    n: () => navigate("/jobs/new"),
+    d: () => navigate("/dashboard"),
+    "?": () => setShowShortcuts((prev) => !prev),
+  });
 
   return (
     <div className="layout">
@@ -172,34 +149,15 @@ export default function Layout(): ReactElement {
       </aside>
 
       <main className="main-content">
-  <Toasts />
+        <Toasts />
 
-  {showShortcuts && (
-    <div
-      style={{
-  position: "fixed",
-  top: "20px",
-  right: "20px",
-  background: "#ffffff",
-  color: "#111111",
-  border: "1px solid #d1d5db",
-  borderRadius: "12px",
-  padding: "16px",
-  zIndex: 1000,
-  minWidth: "220px",
-  boxShadow: "0 8px 24px rgba(0,0,0,0.25)",
-  }}  
-    >
-      <h3 style={{ marginTop: 0 }}>Keyboard Shortcuts</h3>
+        <ShortcutsHelpModal
+          isOpen={showShortcuts}
+          onClose={() => setShowShortcuts(false)}
+        />
 
-      <p><strong>N</strong> → New Job</p>
-      <p><strong>D</strong> → Dashboard</p>
-      <p><strong>?</strong> → Help</p>
-    </div>
-    )}
-
-    <Outlet />
-  </main>
+        <Outlet />
+      </main>
     </div>
   );
 }
