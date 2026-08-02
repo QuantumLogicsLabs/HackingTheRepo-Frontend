@@ -1,0 +1,95 @@
+.shortcuts-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease both;
+}
+
+.shortcuts-modal {
+  background: var(--bg2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  min-width: 300px;
+  max-width: 380px;
+  box-shadow: var(--shadow-lg);
+  font-family: var(--font-body);
+  animation: fadeInUp 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.shortcuts-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.shortcuts-modal__header h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text);
+}
+
+.shortcuts-modal__close {
+  background: transparent;
+  border: none;
+  padding: 4px 8px;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text3);
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.shortcuts-modal__close:hover {
+  color: var(--text);
+  background: var(--bg3);
+}
+
+.shortcuts-modal__close::after {
+  content: none;
+}
+
+.shortcuts-modal__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shortcuts-modal__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.shortcuts-modal__key {
+  min-width: 28px;
+  text-align: center;
+  padding: 3px 8px;
+  border-radius: var(--radius);
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.shortcuts-modal__desc {
+  font-size: 13px;
+  color: var(--text2);
+}
