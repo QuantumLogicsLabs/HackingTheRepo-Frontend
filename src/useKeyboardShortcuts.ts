@@ -7,7 +7,7 @@ const EDITABLE_TAGS = new Set(["INPUT", "TEXTAREA", "SELECT"]);
 
 function isEditableElement(el: HTMLElement): boolean {
   if (EDITABLE_TAGS.has(el.tagName)) return true;
-  return el.contentEditable === "true";
+  return el.isContentEditable || el.contentEditable === "true";
 }
 
 function isTypingTarget(target: EventTarget | null): boolean {
