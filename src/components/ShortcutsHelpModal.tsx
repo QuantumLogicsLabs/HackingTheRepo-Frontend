@@ -61,7 +61,7 @@ export default function ShortcutsHelpModal({
             onClick={onClose}
             aria-label="Close shortcuts help"
           >
-            x
+            ×
           </button>
         </div>
 
