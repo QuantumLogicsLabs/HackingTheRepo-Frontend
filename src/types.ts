@@ -1,4 +1,9 @@
-export type JobStatus = "queued" | "running" | "completed" | "failed" | "refined";
+export type JobStatus =
+  | "queued"
+  | "running"
+  | "completed"
+  | "failed"
+  | "refined";
 
 export interface AuthUser {
   id?: string;
@@ -50,6 +55,7 @@ export interface Job {
   updatedAt?: string;
   repomindJobId?: string;
   diffSummary?: string;
+  diff?: string;
   errorMessage?: string;
   refinements?: JobRefinement[];
 }
