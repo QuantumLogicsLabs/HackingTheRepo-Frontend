@@ -1,0 +1,154 @@
+.dv-root {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dv-file {
+  border: 1px solid var(--border, #2a2a2e);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--bg2, #16161a);
+}
+
+.dv-file-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text1, #eaeaea);
+  font: inherit;
+  text-align: left;
+}
+
+.dv-file-header:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.dv-chevron {
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+  color: var(--text3, #777);
+}
+
+.dv-chevron-collapsed {
+  transform: rotate(-90deg);
+}
+
+.dv-file-path {
+  flex: 1;
+  font-size: 12.5px;
+  color: var(--text2, #ccc);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dv-stats {
+  display: flex;
+  gap: 8px;
+  font-size: 11px;
+  font-family: monospace;
+  flex-shrink: 0;
+}
+
+.dv-added {
+  color: #3fb950;
+}
+
+.dv-removed {
+  color: #f85149;
+}
+
+.dv-table-wrap {
+  overflow-x: auto;
+  border-top: 1px solid var(--border, #2a2a2e);
+}
+
+.dv-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 12px;
+  table-layout: fixed;
+}
+
+.dv-hunk-header td {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text3, #888);
+  padding: 4px 10px;
+  font-size: 11px;
+}
+
+.dv-row {
+  vertical-align: top;
+}
+
+.dv-lineno {
+  width: 40px;
+  min-width: 40px;
+  padding: 1px 8px;
+  text-align: right;
+  color: var(--text3, #666);
+  user-select: none;
+  border-right: 1px solid var(--border, #26262a);
+  white-space: nowrap;
+}
+
+.dv-code {
+  padding: 1px 10px;
+  white-space: pre;
+  width: 50%;
+}
+
+.dv-empty {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.015),
+    rgba(255, 255, 255, 0.015) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+
+.dv-add {
+  background: rgba(46, 160, 67, 0.15);
+}
+.dv-lineno.dv-add {
+  background: rgba(46, 160, 67, 0.25);
+}
+
+.dv-remove {
+  background: rgba(248, 81, 73, 0.15);
+}
+.dv-lineno.dv-remove {
+  background: rgba(248, 81, 73, 0.25);
+}
+
+.dv-normal {
+  background: transparent;
+}
+
+.dv-empty-state {
+  padding: 20px;
+  text-align: center;
+  color: var(--text3, #777);
+  font-size: 13px;
+}
+
+/* Prism token colors, scoped so they don't leak/clash with app-wide styles */
+.dv-code .token.comment { color: #6a737d; }
+.dv-code .token.string { color: #9ecbff; }
+.dv-code .token.number { color: #79b8ff; }
+.dv-code .token.keyword { color: #f97583; }
+.dv-code .token.function { color: #b392f0; }
+.dv-code .token.punctuation { color: #d1d5da; }
+.dv-code .token.property,
+.dv-code .token.tag { color: #85e89d; }
+.dv-code .token.class-name { color: #ffab70; }
+.dv-code .token.boolean,
+.dv-code .token.constant { color: #79b8ff; }

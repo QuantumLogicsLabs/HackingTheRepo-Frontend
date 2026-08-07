@@ -7,6 +7,7 @@ import {
 } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import StatusBadge from "../components/StatusBadge";
+import DiffViewer from "../components/DiffViewer";
 import api from "../utils/api";
 import type { Job } from "../types";
 import "./JobDetailPage.css";
@@ -225,6 +226,23 @@ export default function JobDetailPage() {
           )}
 
           {/* Diff summary or preview */}
+          {job.diff ? (
+            <div className="diff-card card">
+              <h3 className="diff-title">
+                {job.prUrl ? "Diff" : "AI-generated Diff Preview"}
+              </h3>
+              <DiffViewer diffText={job.diff} />
+            </div>
+          ) : (
+            job.diffSummary && (
+              <div className="diff-card card">
+                <h3 className="diff-title">
+                  {job.prUrl ? "Diff Summary" : "AI-generated Diff Preview"}
+                </h3>
+                <p className="diff-text">{job.diffSummary}</p>
+              </div>
+            )
+          )}
           {job.diffSummary && (
             <div className="diff-card card">
               <h3 className="diff-title">
