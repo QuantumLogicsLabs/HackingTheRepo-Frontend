@@ -28,6 +28,7 @@
     "@sentry/react": "^8.45.0",
     "@sentry/tracing": "^7.120.4",
     "axios": "^1.7.2",
+    "cookie-parser": "^1.4.7",
     "express": "^4.18.2",
     "prom-client": "^14.0.1",
     "react": "^18.3.1",

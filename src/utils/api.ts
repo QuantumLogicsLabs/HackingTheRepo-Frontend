@@ -13,7 +13,7 @@ const baseURL =
 const api = axios.create({
   baseURL,
   timeout: 30000,
-  withCredentials: false,
+  withCredentials: true,
 });
 
 const pendingJobRequests = new Set<string>();

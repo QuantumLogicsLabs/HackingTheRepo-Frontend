@@ -14,7 +14,7 @@ export interface LocalUser extends AuthUser {
 }
 
 export interface AuthResponse {
-  token: string;
+  token?: string;
   user: AuthUser | null;
   githubUsername?: string;
   githubToken?: string;

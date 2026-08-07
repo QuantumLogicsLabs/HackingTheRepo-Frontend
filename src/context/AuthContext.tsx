@@ -5,7 +5,7 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-import api, { TOKEN_KEY, USER_KEY, clearSession } from "../utils/api";
+import api, { USER_KEY, clearSession } from "../utils/api";
 import type { ApiErrorResponse, AuthResponse, AuthUser, LocalUser } from "../types";
 
 interface GithubOAuthSettings {
@@ -31,7 +31,6 @@ interface AuthProviderProps {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 const STORAGE_KEYS = {
-  token: TOKEN_KEY,
   user: USER_KEY,
   users: "rm_users",
   githubOAuthState: "rm_github_oauth_state",
@@ -89,10 +88,12 @@ function stripSensitive(
   return safeUser;
 }
 
-function persistSession(token: string | undefined, user: AuthUser | null): void {
-  if (token) {
-    localStorage.setItem(STORAGE_KEYS.token, token);
-  }
+/**
+ * Caches the user object (non-sensitive) so the UI can paint instantly on
+ * reload before /auth/me confirms the httpOnly cookie. This is just a
+ * display cache now — the real session lives in the cookie, not here.
+ */
+function persistSession(user: AuthUser | null): void {
   if (user) {
     writeJson(STORAGE_KEYS.user, user);
   }
@@ -120,14 +121,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const cachedUser = readJson<AuthUser | null>(STORAGE_KEYS.user, null);
-    const token = localStorage.getItem(STORAGE_KEYS.token);
 
-    if (!token) {
-      clearSession();
-      setLoading(false);
-      return;
-    }
-
+    // No local token to check anymore — the httpOnly cookie is invisible to
+    // JS, so /auth/me is the only way to find out if we're actually logged in.
     api
       .get("/auth/me")
       .then((r) => {
@@ -139,10 +135,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
       })
       .catch((error: unknown) => {
         if (shouldUseLocalFallback(error) && cachedUser) {
+          // Backend unreachable (not just "not logged in") — use the cache.
           setUser(cachedUser);
           return;
         }
 
+        // A real 401 means: no valid cookie, genuinely logged out.
         clearSession();
         setUser(null);
       })
@@ -153,7 +151,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       const { data } = await api.post("/auth/login", { email, password });
       const nextUser = stripSensitive(data.user as LocalUser | AuthUser);
-      persistSession(data.token, nextUser);
+      persistSession(nextUser);
       setUser(nextUser);
       return { ...data, user: nextUser };
     } catch (error: unknown) {
@@ -170,11 +168,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
         throw new Error("Use demo@repomind.dev / demo1234, or create a local account on the signup screen.");
       }
 
-      const nextUser = stripSensitive(match);
+      const safeUser = stripSensitive(match);
       const token = `local-${match.id}`;
-      persistSession(token, nextUser);
-      setUser(nextUser);
-      return { token, user: nextUser };
+      persistSession(safeUser);
+      setUser(safeUser);
+      return { token, user: safeUser };
     }
   };
 
@@ -186,7 +184,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       const { data } = await api.post("/auth/signup", { username, email, password });
       const nextUser = stripSensitive(data.user as LocalUser | AuthUser);
-      persistSession(data.token, nextUser);
+      persistSession(nextUser);
       setUser(nextUser);
       return { ...data, user: nextUser };
     } catch (error: unknown) {
@@ -209,7 +207,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       writeJson(STORAGE_KEYS.users, localUsers);
       const token = `local-${nextUser.id}`;
       const safeUser = stripSensitive(nextUser);
-      persistSession(token, safeUser);
+      // IMPORTANT: use safeUser here, not nextUser — nextUser still has the
+      // plaintext password on it, and we never want that in state/localStorage.
+      persistSession(safeUser);
       setUser(safeUser);
       return { token, user: safeUser };
     }
@@ -281,13 +281,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
       });
       data = response.data;
     } else {
-      const token = params.get("token");
       const userPayload = decodeJsonParam<AuthUser>(params.get("user"));
-      if (!token || !userPayload) {
+      if (!userPayload) {
         throw new Error("GitHub sign-in response was missing a user session.");
       }
       data = {
-        token,
         user: userPayload,
         githubUsername: params.get("githubUsername") || userPayload.githubUsername,
         githubToken: params.get("githubToken") || undefined,
@@ -295,7 +293,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
 
     const nextUser = stripSensitive(data.user as LocalUser | AuthUser);
-    persistSession(data.token, nextUser);
+    persistSession(nextUser);
     setUser(nextUser);
 
     await persistGithubSettings(data.githubUsername, data.githubToken);
