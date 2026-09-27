@@ -121,7 +121,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     check(); // run immediately (handles the initial snapshot too)
     const iv = setInterval(() => {
       if (!cancelled) check();
-    }, 8000);
+    }, 30000);
 
     return () => {
       cancelled = true;

@@ -54,51 +54,51 @@ export default function App(): ReactElement {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <NotificationProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <PublicRoute>
-                    <LandingPage />
-                  </PublicRoute>
-                }
-              />
-              <Route
-                path="/login"
-                element={
-                  <PublicRoute>
-                    <LoginPage />
-                  </PublicRoute>
-                }
-              />
-              <Route
-                path="/signup"
-                element={
-                  <PublicRoute>
-                    <SignupPage />
-                  </PublicRoute>
-                }
-              />
-              {/* Pathless layout: React Router v6 matches child paths (/dashboard, /jobs/...) without competing with `/` */}
-              <Route
-                element={
-                  <PrivateRoute>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <PublicRoute>
+                  <LandingPage />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <PublicRoute>
+                  <LoginPage />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <PublicRoute>
+                  <SignupPage />
+                </PublicRoute>
+              }
+            />
+            {/* Pathless layout: React Router v6 matches child paths (/dashboard, /jobs/...) without competing with `/` */}
+            <Route
+              element={
+                <PrivateRoute>
+                  <NotificationProvider>
                     <Layout />
-                  </PrivateRoute>
-                }
-              >
-                <Route path="dashboard" element={<DashboardPage />} />
-                <Route path="analytics" element={<AnalyticsPage />} />
-                <Route path="jobs/new" element={<NewJobPage />} />
-                <Route path="jobs/:id" element={<JobDetailPage />} />
-                <Route path="settings" element={<SettingsPage />} />
-              </Route>
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </BrowserRouter>
-        </NotificationProvider>
+                  </NotificationProvider>
+                </PrivateRoute>
+              }
+            >
+              <Route path="dashboard" element={<DashboardPage />} />
+              <Route path="analytics" element={<AnalyticsPage />} />
+              <Route path="jobs/new" element={<NewJobPage />} />
+              <Route path="jobs/:id" element={<JobDetailPage />} />
+              <Route path="settings" element={<SettingsPage />} />
+            </Route>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>
   );

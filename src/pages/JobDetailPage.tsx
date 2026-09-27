@@ -1,7 +1,6 @@
 import {
   useState,
   useEffect,
-  useRef,
   useCallback,
   type MouseEventHandler,
 } from "react";
@@ -28,7 +27,6 @@ export default function JobDetailPage() {
   const [refining, setRefining] = useState(false);
   const [openingPr, setOpeningPr] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const pollingRef = useRef<number | null>(null);
 
   const fetchJob = useCallback(
     async (poll = false): Promise<Job | undefined> => {
@@ -53,24 +51,31 @@ export default function JobDetailPage() {
     fetchJob();
   }, [id, fetchJob]);
 
-  /** Poll while job is in progress; clear when terminal or unmount */
   useEffect(() => {
     const status = job?.status;
     if (status !== "running" && status !== "queued") return;
+    if (typeof EventSource === "undefined") return; // not available in this environment
 
-    pollingRef.current = window.setInterval(async () => {
-      const updated = await fetchJob(true);
-      if (updated?.status === "completed" || updated?.status === "failed") {
-        if (pollingRef.current !== null) clearInterval(pollingRef.current);
-        pollingRef.current = null;
-      }
-    }, 5000);
+    const source = new EventSource(
+      `${api.defaults.baseURL}/jobs/${id}/stream`,
+      {
+        withCredentials: true,
+      },
+    );
 
-    return () => {
-      if (pollingRef.current !== null) clearInterval(pollingRef.current);
-      pollingRef.current = null;
-    };
-  }, [job?.status, fetchJob]);
+    source.addEventListener("progress", () => {
+      fetchJob(true);
+    });
+
+    source.addEventListener("close", () => {
+      fetchJob(true);
+      source.close();
+    });
+
+    source.onerror = () => source.close();
+
+    return () => source.close();
+  }, [job?.status, id, fetchJob]);
 
   const handleRefine: MouseEventHandler<HTMLButtonElement> = async () => {
     if (!refineText.trim()) return;
@@ -177,9 +182,7 @@ export default function JobDetailPage() {
       </div>
 
       <div className="job-detail-grid">
-        {/* Left: details */}
         <div className="job-detail-main">
-          {/* Info cards */}
           <div className="detail-section card">
             <div className="detail-row">
               <span className="detail-key">Instruction</span>
@@ -207,25 +210,19 @@ export default function JobDetailPage() {
             </div>
           </div>
 
-          {/* PR link */}
           {job.prUrl && (
             <div className="pr-success card">
               <div className="pr-success-icon">🎉</div>
               <div>
                 <div className="pr-success-title">Pull Request Opened!</div>
-                <a
-                  href={job.prUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="pr-url-link"
-                >
-                  {job.prUrl} ↗
-                </a>
+                href={job.prUrl}
+                target="_blank" rel="noopener noreferrer"
+                className="pr-url-link"
+                {job.prUrl} ↗
               </div>
             </div>
           )}
 
-          {/* Diff summary or preview */}
           {job.diff ? (
             <div className="diff-card card">
               <h3 className="diff-title">
@@ -243,7 +240,7 @@ export default function JobDetailPage() {
               </div>
             )
           )}
-          {/* Preview review actions */}
+
           {job.diffSummary && !job.prUrl && (
             <div className="preview-card card">
               <h3 className="diff-title">Review before opening PR</h3>
@@ -262,7 +259,6 @@ export default function JobDetailPage() {
             </div>
           )}
 
-          {/* Error */}
           {job.errorMessage && (
             <div className="error-card card">
               <div className="error-icon">⚠️</div>
@@ -273,7 +269,6 @@ export default function JobDetailPage() {
             </div>
           )}
 
-          {/* Running indicator */}
           {(job.status === "running" || job.status === "queued") && (
             <div className="running-card card">
               <div className="running-anim">
@@ -284,17 +279,14 @@ export default function JobDetailPage() {
               <div>
                 <div className="running-title">Agent is working...</div>
                 <div className="running-sub">
-                  Status updates every 5 seconds. The bot is cloning, planning,
-                  and applying changes.
+                  Live updates as the bot clones, plans, and applies changes.
                 </div>
               </div>
             </div>
           )}
         </div>
 
-        {/* Right: refine + history */}
         <div className="job-detail-side">
-          {/* Refinement */}
           {(job.status === "completed" || job.status === "refined") && (
             <div className="card refine-card">
               <h3 className="refine-title">🔁 Refine PR</h3>
@@ -318,7 +310,6 @@ export default function JobDetailPage() {
             </div>
           )}
 
-          {/* Refinement history */}
           {(job.refinements?.length ?? 0) > 0 && (
             <div className="card">
               <h3 className="refine-title">Refinement History</h3>
@@ -336,7 +327,6 @@ export default function JobDetailPage() {
             </div>
           )}
 
-          {/* Raw job id + manual poll */}
           <div className="card" style={{ padding: 14 }}>
             <div
               style={{ fontSize: 11, color: "var(--text3)", marginBottom: 8 }}
